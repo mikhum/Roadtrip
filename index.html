@@ -462,10 +462,10 @@
             const placeType = document.getElementById('placeType').value;
             const freeText = document.getElementById('freeText').value.trim();
             
-            // --- FIX FÖR LADDSTATIONER ---
+            // --- FIX FÖR LADDSTATIONER OCH FRITEXT ---
             let queryStr = "";
             if (placeType === 'electric vehicle charging station') {
-                // Bredda sökningen till att gälla fler typer av platser med laddare (t.ex. mackar)
+                // Bredare sökning för att hitta bensinmackar/restauranger med laddare
                 const evKeywords = "elbilsladdning ELLER snabbladdare ELLER laddstation";
                 queryStr = freeText ? `${freeText} ${evKeywords}` : evKeywords;
             } else {
@@ -478,7 +478,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Goog-Api-Key': apiKey,
-                        // Notera tillägg av places.evChargeOptions i framtidssyfte!
+                        // Inkluderar places.evChargeOptions för live-data
                         'X-Goog-FieldMask': 'places.id,places.displayName,places.location,places.rating,places.priceLevel,places.formattedAddress,places.photos,places.primaryType,places.googleMapsUri,places.evChargeOptions'
                     },
                     body: JSON.stringify({
@@ -549,10 +549,31 @@
                     }
                 }
 
-                // Kolla om platsen har EV-laddare (för mackar) och lägg till en ikon
+                // --- NY LOGIK FÖR LADD-STATUS (Realtid och Totalt) ---
                 let evBadge = '';
                 if (place.evChargeOptions && place.evChargeOptions.connectorCount > 0) {
-                     evBadge = `<span class="text-[9px] font-medium text-green-600 bg-green-50 px-1 py-0.5 rounded border border-green-200">⚡ Laddare</span>`;
+                    const total = place.evChargeOptions.connectorCount;
+                    let available = 0;
+                    let hasLiveStatus = false;
+                    
+                    const aggs = place.evChargeOptions.connectorAggregations || place.evChargeOptions.connectorAggregation || [];
+                    
+                    aggs.forEach(agg => {
+                        if (agg.availableCount !== undefined) {
+                            hasLiveStatus = true;
+                            available += agg.availableCount;
+                        }
+                    });
+
+                    if (hasLiveStatus) {
+                        if (available > 0) {
+                            evBadge = `<span class="text-[9px] font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-300 shadow-sm whitespace-nowrap">⚡ ${available} av ${total} lediga</span>`;
+                        } else {
+                            evBadge = `<span class="text-[9px] font-medium text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-300 shadow-sm whitespace-nowrap">⚡ Alla ${total} är upptagna</span>`;
+                        }
+                    } else {
+                        evBadge = `<span class="text-[9px] font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 shadow-sm whitespace-nowrap">⚡ ${total} st laddare</span>`;
+                    }
                 }
 
                 let mapLink = place.googleMapsUri ? `<a href="${place.googleMapsUri}" target="_blank" class="text-indigo-600 hover:text-indigo-800 p-1 rounded-full hover:bg-indigo-50" title="Google Maps"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>` : '';
