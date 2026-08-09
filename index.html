@@ -462,14 +462,29 @@
             const placeType = document.getElementById('placeType').value;
             const freeText = document.getElementById('freeText').value.trim();
             
-            // --- FIX FÖR LADDSTATIONER OCH FRITEXT ---
+            // --- NY LOGIK FÖR SMARTARE SÖKNINGAR PÅ SVENSKA ---
             let queryStr = "";
-            if (placeType === 'electric vehicle charging station') {
-                // Bredare sökning för att hitta bensinmackar/restauranger med laddare
-                const evKeywords = "elbilsladdning ELLER snabbladdare ELLER laddstation";
-                queryStr = freeText ? `${freeText} ${evKeywords}` : evKeywords;
+            
+            // Breda sökord när användaren INTE har skrivit något i fritextfältet
+            const broadKeywords = {
+                'hotel': 'hotell ELLER övernattning ELLER vandrarhem ELLER boende',
+                'tourist attraction': 'sevärdhet ELLER utflyktsmål ELLER attraktion ELLER museum',
+                'restaurant': 'restaurang ELLER matställe ELLER mat ELLER take-away ELLER café',
+                'electric vehicle charging station': 'elbilsladdning ELLER snabbladdare ELLER laddstation'
+            };
+            
+            // Enkla sökord att lägga till om användaren HAR skrivit egen fritext
+            const simpleKeywords = {
+                'hotel': 'hotell',
+                'tourist attraction': 'sevärdhet',
+                'restaurant': 'restaurang',
+                'electric vehicle charging station': 'laddstation'
+            };
+
+            if (freeText) {
+                queryStr = `${freeText} ${simpleKeywords[placeType]}`;
             } else {
-                queryStr = freeText ? `${freeText} ${placeType}` : placeType;
+                queryStr = broadKeywords[placeType];
             }
 
             try {
