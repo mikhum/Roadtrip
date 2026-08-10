@@ -6,7 +6,7 @@
     <title>Roadtrip!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; overflow: hidden; touch-action: none;} 
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; overflow: hidden; touch-action: none;}
         #map { width: 100%; height: 100%; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -14,7 +14,7 @@
         .gmnoprint { transition: opacity 0.3s ease; }
         .place-card.active { border-color: #3b82f6; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5); background-color: #eff6ff;}
         
-        /* Specifik styling för drag-panelen på mobil */
+        /* Drag-panel på mobil */
         @media (max-width: 767px) {
             #resultPanel {
                 position: absolute;
@@ -27,8 +27,8 @@
                 box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 z-index: 30;
-                height: 85dvh; 
-                transform: translateY(calc(100% - 100px)); 
+                height: 85dvh;
+                transform: translateY(calc(100% - 100px));
                 display: flex;
                 flex-direction: column;
             }
@@ -62,24 +62,23 @@
         </div>
     </div>
 
-    <!-- Header (Överst över hela skärmen) -->
-    <header class="bg-white shadow-sm z-20 flex flex-col md:flex-row px-3 py-2 border-b border-gray-200 gap-3 md:gap-6 md:items-center shrink-0">
-        <!-- Titel -->
-        <div class="flex items-center gap-1.5 shrink-0">
-            <div class="bg-indigo-600 p-1 rounded text-white">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+    <!-- Header & Kontroller (Top Toolbar) -->
+    <header class="bg-white shadow-sm z-20 flex flex-col px-3 py-2 border-b border-gray-200 gap-2 shrink-0">
+        <div class="flex items-center justify-between w-full">
+            <div class="flex items-center gap-1.5">
+                <div class="bg-indigo-600 p-1 rounded text-white">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h1 class="text-base font-bold text-gray-800 tracking-tight">Roadtrip!</h1>
             </div>
-            <h1 class="text-base font-bold text-gray-800 tracking-tight flex-1">Roadtrip!</h1>
             
-            <button onclick="toggleSettings()" class="md:hidden p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors ml-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+            <button onclick="toggleSettings()" class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             </button>
         </div>
 
-        <!-- Kontroller (Sök & Betyg) -->
-        <div class="flex flex-col sm:flex-row items-center gap-2 w-full flex-1">
-            <div class="flex items-center gap-2 w-full md:w-auto md:flex-1 max-w-2xl">
-                <!-- Select: Kortare text på mobil -->
+        <div class="flex flex-col sm:flex-row items-center gap-2 w-full">
+            <div class="flex items-center gap-2 w-full">
                 <select id="placeType" class="w-[85px] sm:w-auto text-xs sm:text-sm border-gray-300 rounded-md py-1.5 pl-2 pr-6 focus:ring-indigo-500 border bg-white cursor-pointer font-medium text-gray-700 shrink-0">
                     <option value="hotel" class="hidden sm:block">🏨 Hotell</option>
                     <option value="hotel" class="sm:hidden">🏨 Hot</option>
@@ -92,27 +91,23 @@
                 </select>
 
                 <div class="relative flex-1">
-                    <input type="text" id="freeText" placeholder="Sökord (t.ex. Circle K)..." class="w-full pl-7 pr-2 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <input type="text" id="freeText" placeholder="Fritext..." class="w-full pl-7 pr-2 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     <svg class="w-3.5 h-3.5 text-gray-400 absolute left-2 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 w-full sm:w-auto sm:border-l sm:border-gray-300 sm:pl-3 shrink-0">
+            <div class="flex items-center gap-2 w-full sm:w-auto sm:border-l sm:border-gray-300 sm:pl-2">
                 <label class="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">Minst: <span id="ratingVal" class="text-indigo-600">4.0</span>⭐</label>
-                <input type="range" id="minRating" min="1" max="5" step="0.5" value="4.0" class="w-full sm:w-24 accent-indigo-600 h-1.5" oninput="document.getElementById('ratingVal').innerText = this.value">
+                <input type="range" id="minRating" min="1" max="5" step="0.5" value="4.0" class="w-full sm:w-20 accent-indigo-600 h-1.5" oninput="document.getElementById('ratingVal').innerText = this.value">
             </div>
-
-            <button onclick="toggleSettings()" class="hidden md:block p-1.5 text-gray-500 hover:bg-gray-100 rounded-full transition-colors ml-auto">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
-            </button>
         </div>
     </header>
 
-    <!-- Huvudinnehåll (Karta till vänster, Lista till höger på Desktop) -->
+    <!-- Huvudinnehåll (Karta + Lista) -->
     <main class="flex-1 flex flex-col md:flex-row relative overflow-hidden">
         
         <!-- Karta -->
-        <div class="flex-1 relative bg-gray-200">
+        <div class="flex-1 relative bg-gray-200 h-full">
             <div id="map" class="absolute inset-0"></div>
             
             <div id="mapOverlay" class="absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-10 hidden">
@@ -140,9 +135,8 @@
             </button>
         </div>
 
-        <!-- Resultatlista (Sidebar på Desktop, Resizable Panel på Mobil) -->
-        <aside id="resultPanel" class="w-full md:w-96 md:relative md:h-full md:transform-none md:border-l border-gray-200 md:bg-white flex flex-col shrink-0 z-30">
-            
+        <!-- Resultatlista -->
+        <aside id="resultPanel" class="w-full md:w-96 md:relative md:h-full md:transform-none md:border-l border-gray-200 md:bg-white flex flex-col shrink-0">
             <!-- Drag Handle (Endast mobil) -->
             <div id="dragHandleArea" class="w-full flex justify-center items-center h-8 md:hidden bg-white rounded-t-3xl cursor-grab active:cursor-grabbing border-b border-gray-100 shrink-0">
                 <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
@@ -181,7 +175,6 @@
         let freehandLine = null;
         let drawListeners = [];
 
-        // Hämta API-nyckel vid start
         document.addEventListener('DOMContentLoaded', () => {
             const savedKey = localStorage.getItem('googleMapsApiKey');
             if (savedKey) {
@@ -194,12 +187,10 @@
             initDragPanel();
         });
 
-        // --- Logik för Swipeable Bottom Sheet (Mobil) ---
         function initDragPanel() {
             const panel = document.getElementById('resultPanel');
             const handle = document.getElementById('dragHandleArea');
             let startY, startTransform;
-            let currentTransform = 100;
 
             if(window.innerWidth >= 768) return;
 
@@ -211,32 +202,28 @@
 
             handle.addEventListener('touchstart', (e) => {
                 startY = e.touches[0].clientY;
-                panel.style.transition = 'none'; 
+                panel.style.transition = 'none';
                 startTransform = getTransformY(panel);
             }, {passive: true});
 
             handle.addEventListener('touchmove', (e) => {
                 const deltaY = e.touches[0].clientY - startY;
                 let newY = startTransform + deltaY;
-                
-                if(newY < 0) newY = 0; 
+                if(newY < 0) newY = 0;
                 const maxClosed = window.innerHeight * 0.85 - 100;
-                if(newY > maxClosed) newY = maxClosed; 
-
+                if(newY > maxClosed) newY = maxClosed;
                 panel.style.transform = `translateY(${newY}px)`;
             }, {passive: true});
 
             handle.addEventListener('touchend', (e) => {
                 panel.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                panel.style.transform = ''; 
-                
+                panel.style.transform = '';
                 const deltaY = e.changedTouches[0].clientY - startY;
                 
                 if (deltaY < -30) {
                     panel.classList.add('open');
                     panel.classList.remove('half');
-                } 
-                else if (deltaY > 30) {
+                } else if (deltaY > 30) {
                     panel.classList.remove('open');
                     panel.classList.remove('half');
                 }
@@ -462,29 +449,16 @@
             const placeType = document.getElementById('placeType').value;
             const freeText = document.getElementById('freeText').value.trim();
             
-            // --- NY LOGIK FÖR SMARTARE SÖKNINGAR PÅ SVENSKA ---
+            // GLOBAL SMART QUERY (Engelska bas-termer som Google översätter automatiskt över hela världen)
             let queryStr = "";
-            
-            // Breda sökord när användaren INTE har skrivit något i fritextfältet
-            const broadKeywords = {
-                'hotel': 'hotell ELLER övernattning ELLER vandrarhem ELLER boende',
-                'tourist attraction': 'sevärdhet ELLER utflyktsmål ELLER attraktion ELLER museum',
-                'restaurant': 'restaurang ELLER matställe ELLER mat ELLER take-away ELLER café',
-                'electric vehicle charging station': 'elbilsladdning ELLER snabbladdare ELLER laddstation'
-            };
-            
-            // Enkla sökord att lägga till om användaren HAR skrivit egen fritext
-            const simpleKeywords = {
-                'hotel': 'hotell',
-                'tourist attraction': 'sevärdhet',
-                'restaurant': 'restaurang',
-                'electric vehicle charging station': 'laddstation'
-            };
-
             if (freeText) {
-                queryStr = `${freeText} ${simpleKeywords[placeType]}`;
+                queryStr = `${freeText} ${placeType}`;
             } else {
-                queryStr = broadKeywords[placeType];
+                if (placeType === 'restaurant') queryStr = "restaurant OR cafe OR takeaway OR food";
+                else if (placeType === 'electric vehicle charging station') queryStr = "EV charging station OR electric vehicle charger";
+                else if (placeType === 'hotel') queryStr = "hotel OR lodging OR motel OR hostel";
+                else if (placeType === 'tourist attraction') queryStr = "tourist attraction OR sightseeing OR point of interest";
+                else queryStr = placeType; // Fallback
             }
 
             try {
@@ -493,11 +467,11 @@
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Goog-Api-Key': apiKey,
-                        // Inkluderar places.evChargeOptions för live-data
                         'X-Goog-FieldMask': 'places.id,places.displayName,places.location,places.rating,places.priceLevel,places.formattedAddress,places.photos,places.primaryType,places.googleMapsUri,places.evChargeOptions'
                     },
                     body: JSON.stringify({
                         textQuery: queryStr,
+                        languageCode: "sv", // Tvinga resultaten (titlar/adresser) att returneras på svenska
                         locationRestriction: { rectangle: { low: { latitude: south, longitude: west }, high: { latitude: north, longitude: east } } }
                     })
                 });
@@ -564,30 +538,16 @@
                     }
                 }
 
-                // --- NY LOGIK FÖR LADD-STATUS (Realtid och Totalt) ---
                 let evBadge = '';
                 if (place.evChargeOptions && place.evChargeOptions.connectorCount > 0) {
                     const total = place.evChargeOptions.connectorCount;
-                    let available = 0;
-                    let hasLiveStatus = false;
+                    const available = place.evChargeOptions.connectorAggregation?.[0]?.availableCount;
                     
-                    const aggs = place.evChargeOptions.connectorAggregations || place.evChargeOptions.connectorAggregation || [];
-                    
-                    aggs.forEach(agg => {
-                        if (agg.availableCount !== undefined) {
-                            hasLiveStatus = true;
-                            available += agg.availableCount;
-                        }
-                    });
-
-                    if (hasLiveStatus) {
-                        if (available > 0) {
-                            evBadge = `<span class="text-[9px] font-medium text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-300 shadow-sm whitespace-nowrap">⚡ ${available} av ${total} lediga</span>`;
-                        } else {
-                            evBadge = `<span class="text-[9px] font-medium text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-300 shadow-sm whitespace-nowrap">⚡ Alla ${total} är upptagna</span>`;
-                        }
+                    if (available !== undefined) {
+                        if (available > 0) evBadge = `<span class="text-[9px] font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded border border-green-200" title="${total} uttag totalt">⚡ ${available} av ${total} lediga</span>`;
+                        else evBadge = `<span class="text-[9px] font-bold text-red-700 bg-red-100 px-1.5 py-0.5 rounded border border-red-200" title="${total} uttag totalt">⚡ Fullbelagt (${total})</span>`;
                     } else {
-                        evBadge = `<span class="text-[9px] font-medium text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 shadow-sm whitespace-nowrap">⚡ ${total} st laddare</span>`;
+                        evBadge = `<span class="text-[9px] font-bold text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded border border-blue-200">⚡ ${total} uttag</span>`;
                     }
                 }
 
@@ -610,14 +570,11 @@
                                     <span class="text-amber-400 mr-0.5">★</span> ${place.rating || '-'}
                                 </div>
                             </div>
-                            <div class="flex items-center gap-1 mt-0.5">
-                                <p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider truncate">${typeStr}</p>
-                                ${evBadge}
-                            </div>
+                            <p class="text-[9px] text-gray-400 font-medium uppercase tracking-wider truncate mt-0.5">${typeStr}</p>
                             <p class="text-[9px] text-gray-500 truncate mt-0.5">${place.formattedAddress.split(',')[0]}</p>
                         </div>
                         <div class="flex justify-between items-center mt-1">
-                            ${priceBadge}
+                            <div class="flex items-center gap-1">${priceBadge} ${evBadge}</div>
                             ${mapLink}
                         </div>
                     </div>
